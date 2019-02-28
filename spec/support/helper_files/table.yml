@@ -1,0 +1,67 @@
+---
+:attribute_definitions:
+- :attribute_name: PrimaryKey
+  :attribute_type: S
+- :attribute_name: RangeKey
+  :attribute_type: S
+- :attribute_name: LSI1_RangeKey
+  :attribute_type: S
+- :attribute_name: LSI2_RangeKey
+  :attribute_type: S
+- :attribute_name: GSI1_PrimaryKey
+  :attribute_type: S
+- :attribute_name: GSI1_RangeKey
+  :attribute_type: S
+- :attribute_name: GSI2_PrimaryKey
+  :attribute_type: S
+:key_schema:
+- :attribute_name: PrimaryKey
+  :key_type: HASH
+- :attribute_name: RangeKey
+  :key_type: RANGE
+:global_secondary_indexes:
+- :index_name: global_secondary_index_1
+  :key_schema:
+  - :attribute_name: GSI1_PrimaryKey
+    :key_type: HASH
+  - :attribute_name: GSI1_RangeKey
+    :key_type: RANGE
+  :projection:
+    :projection_type: ALL
+  :provisioned_throughput:
+    :read_capacity_units: 5
+    :write_capacity_units: 5
+- :index_name: global_secondary_index_2
+  :key_schema:
+  - :attribute_name: GSI2_PrimaryKey
+    :key_type: HASH
+  :projection:
+    :projection_type: ALL
+  :provisioned_throughput:
+    :read_capacity_units: 5
+    :write_capacity_units: 5
+:local_secondary_indexes:
+- :index_name: local_secondary_index_1
+  :key_schema:
+  - :attribute_name: PrimaryKey
+    :key_type: HASH
+  - :attribute_name: LSI1_RangeKey
+    :key_type: RANGE
+  :projection:
+    :projection_type: INCLUDE
+    :non_key_attributes:
+    - PrimaryKey
+    - RangeKey
+    - LSI2_RangeKey
+- :index_name: local_secondary_index_2
+  :key_schema:
+  - :attribute_name: PrimaryKey
+    :key_type: HASH
+  - :attribute_name: LSI2_RangeKey
+    :key_type: RANGE
+  :projection:
+    :projection_type: INCLUDE
+    :non_key_attributes:
+    - PrimaryKey
+    - RangeKey
+    - LSI1_RangeKey

@@ -1,0 +1,26 @@
+#!/usr/bin/env ruby
+
+require 'bundler/setup'
+require 'pry'
+require 'mara'
+require 'securerandom'
+require 'yaml'
+
+SUPPORT_PATH = Pathname.new(__dir__).join('..', 'spec', 'support')
+
+Mara.configure('development') do |config|
+  config.dynamodb.table_name = SecureRandom.uuid
+  config.dynamodb.endpoint = 'http://127.0.0.1:8000'
+end
+
+content = File.read(SUPPORT_PATH.join('helper_files', 'table.yml'))
+
+Mara::Table.prepare!(YAML.safe_load(content, [Symbol]))
+
+Dir.glob(SUPPORT_PATH.join('models', '*.rb')).each { |f| require f }
+
+begin
+  Pry.start
+ensure
+  Mara::Table.teardown!
+end

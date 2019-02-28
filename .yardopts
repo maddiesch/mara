@@ -1,0 +1,5 @@
+--no-private
+--hide-void-return
+lib/**/*.rb
+README
+CHANGELOG
